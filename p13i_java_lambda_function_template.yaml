@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'Lambda Function stack that uses Lambda Layer'
+
+Parameters:
+  ArtifactName:
+    Type: String
+  LambdaLayerStackName:
+    Type: String
+  TagRoot:
+    Description: The main Root structure
+    Type: String
+  TagProject:
+    Description: The name of the Project under Root
+    Type: String
+  TagComponent:
+    Description: The name of the Component within the Project under Root
+    Type: String
+
+Resources:
+  P13iMITEgJavaLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Function using Layer
+      CodeUri: 'target/p13i-java-example-lambda-function-1.0.0-SNAPSHOT.jar'
+      Handler: 'com.p13i.mit.aws.example.function.GreetingsHandler::handleRequest'
+      Runtime: 'java11'
+      Role: !GetAtt 'P13iMITEgJavaLambdaFunctionExecRole.Arn'
+      MemorySize: 256
+      Timeout: 60
+      Layers:
+        Fn::ImportValue:
+          !Sub "${LambdaLayerStackName}-LambdaLayerArn"
+      Tags:
+      - Key: "Name"
+        Value: "JLF"
+      - Key: "Stack"
+        Value: !Ref AWS::StackName
+      - Key: "ROOT"
+        Value: !Ref TagRoot
+      - Key: "Project"
+        Value: !Ref TagProject
+      - Key: "Component"
+        Value: !Ref TagComponent
+
+  P13iMITEgJavaLambdaFunctionExecRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+      Policies:
+      - PolicyName: P13iMITEgJavaLambdaFunctionExecRolePolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          -
+            Effect: Allow
+            Action:
+            #- Sample actions - dont really need them in this example
+            - 'dynamodb:PutItem'
+            - 'dynamodb:UpdateItem'
+            - 'dynamodb:DeleteItem'
+            Resource:
+            - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*'
+      Tags:
+      - Key: "Name"
+        Value: "JLF Exec Role"
+      - Key: "Stack"
+        Value: !Ref AWS::StackName
+      - Key: "ROOT"
+        Value: !Ref TagRoot
+      - Key: "Project"
+        Value: !Ref TagProject
+      - Key: "Component"
+        Value: !Ref TagComponent
+
+Outputs:
+  P13iMITEgJavaLambdaFunctionArn:
+    Value: !Ref 'P13iMITEgJavaLambdaFunction'
+  P13iMITEgJavaLambdaFunctionExecRoleArn:
+    Value: !GetAtt 'P13iMITEgJavaLambdaFunctionExecRole.Arn'
