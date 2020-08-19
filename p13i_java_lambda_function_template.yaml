@@ -3,8 +3,6 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: 'Lambda Function stack that uses Lambda Layer'
 
 Parameters:
-  ArtifactName:
-    Type: String
   LambdaLayerStackName:
     Type: String
   TagRoot:
@@ -64,7 +62,7 @@ Resources:
           -
             Effect: Allow
             Action:
-            #- Sample actions - dont really need them in this example
+            #- Sample actions - don't really need them in this example
             - 'dynamodb:PutItem'
             - 'dynamodb:UpdateItem'
             - 'dynamodb:DeleteItem'
