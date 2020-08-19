@@ -27,8 +27,8 @@ Resources:
       MemorySize: 256
       Timeout: 60
       Layers:
-        Fn::ImportValue:
-          !Sub "${LambdaLayerStackName}-LambdaLayerArn"
+        - Fn::ImportValue:
+            !Sub "${LambdaLayerStackName}-LambdaLayerArn"
       Tags:
         Name:  "JLF"
         Stack: !Ref AWS::StackName
