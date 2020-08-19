@@ -30,16 +30,11 @@ Resources:
         Fn::ImportValue:
           !Sub "${LambdaLayerStackName}-LambdaLayerArn"
       Tags:
-      - Key: "Name"
-        Value: "JLF"
-      - Key: "Stack"
-        Value: !Ref AWS::StackName
-      - Key: "ROOT"
-        Value: !Ref TagRoot
-      - Key: "Project"
-        Value: !Ref TagProject
-      - Key: "Component"
-        Value: !Ref TagComponent
+        Name:  "JLF"
+        Stack: !Ref AWS::StackName
+        ROOT: !Ref TagRoot
+        Project: !Ref TagProject
+        Component: !Ref TagComponent
 
   P13iMITEgJavaLambdaFunctionExecRole:
     Type: AWS::IAM::Role
