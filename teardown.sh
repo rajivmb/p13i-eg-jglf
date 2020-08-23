@@ -27,9 +27,8 @@ delete_stack () {
 
 fetch_stack_status() {
     aws cloudformation list-stacks \
-        --query "StackSummaries[?StackName=='${1}'].StackStatus" \
-        --max-items 1 \
-        --output text | head -n 1
+        --query "StackSummaries[?StackId=='${1}'].StackStatus" \
+        --output text
 }
 
 #<REF/> https://stackoverflow.com/a/12694189
@@ -52,10 +51,14 @@ printf "\nStarting to tear down %s\n" ${projectName}
 get_resource s3Bucket ${projectName} "BuildArtifactsBucketName"
 
 for stack in ${stacks[@]}; do
+    stackId=$(aws cloudformation describe-stacks \
+        --stack-name "${stack}" \
+        --query "Stacks[*].StackId" \
+        --output text)
 
-    delete_stack ${stack}
+    delete_stack ${stackId}
 
-    stackStatus=$(fetch_stack_status ${stack})
+    stackStatus=$(fetch_stack_status ${stackId})
     waitTime=0
     until [[ " ${END_STATE_CODES[@]} " =~ " ${stackStatus} " ]]; do
         minutes=$((${waitTime}/60))
@@ -63,7 +66,7 @@ for stack in ${stacks[@]}; do
         printf "\rStack status is: ${stackStatus}. Waiting... ${spinner:i++%${#spinner}:1} [ %02dm %02ds ]" ${minutes} ${seconds}
         sleep 5
         waitTime=$((${waitTime}+5))
-        stackStatus=$(fetch_stack_status ${stack})
+        stackStatus=$(fetch_stack_status ${stackId})
     done
     printf "\nStack status is: %s.\n" ${stackStatus}
 done
