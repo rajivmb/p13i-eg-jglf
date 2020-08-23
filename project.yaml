@@ -29,6 +29,13 @@ Parameters:
   TagComponent:
     Description: The name of the Component within the Project under Root
     Type: String
+  CreateGitHubWebHook:
+    Description: Condition value to check if GitHub Webhook should be created or not
+    Type: String
+    Default: N
+
+Conditions:
+  GitHubWebHookAction: !Equals [ !Ref CreateGitHubWebHook, Y ]
 
 Resources:
 
@@ -241,6 +248,7 @@ Resources:
 
   P13iMITEgJGLFGitHubWebhook:
     Type: 'AWS::CodePipeline::Webhook'
+    Condition: GitHubWebHookAction
     Properties:
       Authentication: GITHUB_HMAC
       AuthenticationConfiguration:
@@ -434,9 +442,11 @@ Outputs:
     Value: !Ref Pipeline
 
   P13iMITEgJGLFGitHubWebhookName:
+    Condition: GitHubWebHookAction
     Value: !Ref P13iMITEgJGLFGitHubWebhook
 
   P13iMITEgJGLFGitHubWebhookUrl:
+    Condition: GitHubWebHookAction
     Value: !GetAtt P13iMITEgJGLFGitHubWebhook.Url
 
   CodeBuildServiceRoleArn:
