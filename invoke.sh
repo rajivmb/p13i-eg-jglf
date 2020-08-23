@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Load the necessary arguments from file
-. setup_args.txt
+#<REF/> https://stackoverflow.com/a/12694189
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "${DIR}" ]]; then DIR="${PWD}"; fi
+printf "DIR is %s\n" ${DIR}
 
-read -t ${inputTimeout} -p "Enter component name [${projectName}], you have ${inputTimeout}s: " input
+# Load the necessary arguments from file
+. ${DIR}/setup_args.txt
+
+read -t ${inputTimeout} -p "Enter component name [${projectName}], you have ${inputTimeout}s or press <Enter> to accept default: " input
 
 projectName=${input:-$projectName}
 greetingName="github.com/rajivmb"

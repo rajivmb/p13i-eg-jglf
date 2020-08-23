@@ -20,7 +20,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Description: Function using Layer
-      CodeUri: 'target/p13i-java-example-lambda-function-1.0.0-SNAPSHOT.jar'
+      CodeUri: 'target/p13i-java-greetings-lambda-function-1.0.0-SNAPSHOT.jar'
       Handler: 'com.p13i.mit.aws.example.function.GreetingsHandler::handleRequest'
       Runtime: 'java11'
       Role: !GetAtt 'P13iMITEgJavaLambdaFunctionExecRole.Arn'
@@ -30,7 +30,7 @@ Resources:
         - Fn::ImportValue:
             !Sub "${LambdaLayerStackName}-LambdaLayerArn"
       Tags:
-        Name:  "JLF"
+        Name:  "JGLF"
         Stack: !Ref AWS::StackName
         ROOT: !Ref TagRoot
         Project: !Ref TagProject
@@ -65,7 +65,7 @@ Resources:
             - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*'
       Tags:
       - Key: "Name"
-        Value: "JLF Exec Role"
+        Value: "JGLF Exec Role"
       - Key: "Stack"
         Value: !Ref AWS::StackName
       - Key: "ROOT"

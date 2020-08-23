@@ -1,9 +1,9 @@
 inputTimeout=10
-projectName="P13i-MIT-Eg-JLF"
+projectName="P13i-MIT-Eg-JGLF"
 lambdaLayerStackName="P13i-MIT-Eg-JPLL-DEPLOY"
 githubOwner="rajivmb"
 gitHubTokenSecret="P13iAWSGitHubTokenSecret"
 internalRepoURL="https://maven.pkg.github.com/rajivmb/p13i-mvn-repo"
-codeRepository="p13i-mit-eg-jlf"
+codeRepository="p13i-mit-eg-jglf"
 tagRoot="P13i"
 tagProject="MIT"
