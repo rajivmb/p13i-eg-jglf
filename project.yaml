@@ -203,7 +203,7 @@ Resources:
             RoleArn: !GetAtt CloudFormationExecRole.Arn
             StackName: !Sub "${ArtifactName}-DEPLOY"
             ChangeSetName: !Sub "${ArtifactName}-DEPLOY-ChangeSet"
-            TemplatePath: BuildArtifactAsZip::p13i_java_lambda_function_packaged.yaml
+            TemplatePath: BuildArtifactAsZip::p13i_java_greetings_lambda_function_packaged.yaml
             ParameterOverrides: !Sub |
               {
                 "LambdaLayerStackName":"${LambdaLayerStackName}",

@@ -26,7 +26,7 @@ phases:
     commands:
       # Use Post Build for notifications, git tags and any further customization after build
       # <Ref/> https://blog.tedder.dev/posts/conditionals-in-aws-codebuild/
-      - aws cloudformation package --template-file p13i_java_lambda_function_template.yaml --s3-bucket $BUILD_OUTPUT_BUCKET --s3-prefix "${ARTIFACT_NAME}-Artifacts" --output-template-file p13i_java_lambda_function_packaged.yaml
+      - aws cloudformation package --template-file p13i_java_greetings_lambda_function_template.yaml --s3-bucket $BUILD_OUTPUT_BUCKET --s3-prefix "${ARTIFACT_NAME}-Artifacts" --output-template-file p13i_java_greetings_lambda_function_packaged.yaml
 
 ##################################
 # Build Artifacts to be uploaded #
@@ -34,7 +34,7 @@ phases:
 
 artifacts:
   files:
-  - p13i_java_lambda_function_packaged.yaml
+  - p13i_java_greetings_lambda_function_packaged.yaml
   discard-paths: yes
 
 #########################################
