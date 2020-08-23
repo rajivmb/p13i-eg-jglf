@@ -42,7 +42,7 @@ printf "DIR is %s\n" ${DIR}
 
 printf "Commencing tear down...\n"
 
-read -t ${inputTimeout} -p "Enter component name [${projectName}], you have ${inputTimeout}s or press <Enter> to accept default: " input
+read -t ${inputTimeout} -p "Enter component name [${projectName}] or press <Enter> to accept default, you have ${inputTimeout}s: " input
 projectName=${input:-$projectName}
 
 stacks=("${projectName}-DEPLOY" "${projectName}")
