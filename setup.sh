@@ -53,6 +53,8 @@ read -t ${inputTimeout} -p "Enter your GitHub Packages (repo) URL to use as priv
 
 internalRepoURL=${inputGitHubMavenRepoURL:-$internalRepoURL}
 
+printf "\n"
+
 get_resource lambdaLayer "${parentName}-DEPLOY" "${layerName}"
 
 OIFS=$IFS
@@ -61,17 +63,17 @@ layerArnArray=(${lambdaLayer})
 lambdaLayer="arn:aws:lambda:${layerArnArray[3]}:${layerArnArray[4]}:layer:${layerArnArray[6]}"
 IFS=${OIFS}
 
-printf "\nFetching latest version of Lambda Layer: %s.\n" ${lambdaLayer}
+printf "Fetching latest version of Lambda Layer: %s.\n" ${lambdaLayer}
 lambdaLayerVersion=$(aws lambda list-layer-versions \
     --layer-name "${lambdaLayer}" \
     --query "LayerVersions[*].Version" \
     --max-items 1 \
     --output text | head -n 1)
 
-printf "\nLatest version of Lambda Layer: %s. is %s\n" ${lambdaLayer} ${lambdaLayerVersion}
+printf "Latest version of Lambda Layer: %s. is %s\n" ${lambdaLayer} ${lambdaLayerVersion}
 
 
-printf "\nStarting to setup %s\n" ${projectName}
+printf "Starting to setup %s\n" ${projectName}
 
 printf "Deploying stack of %s\n" ${projectName}
 

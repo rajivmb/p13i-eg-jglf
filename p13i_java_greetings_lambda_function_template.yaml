@@ -3,9 +3,7 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: 'Lambda Function stack that uses Lambda Layer'
 
 Parameters:
-  LambdaLayerStackName:
-    Type: String
-  LambdaLayerVersion:
+  LambdaLayer:
     Type: String
   TagRoot:
     Description: The main Root structure
@@ -29,8 +27,7 @@ Resources:
       MemorySize: 256
       Timeout: 60
       Layers:
-        - Fn::ImportValue:
-            !Sub "${LambdaLayerStackName}-LambdaLayer:${LambdaLayerVersion}"
+        - !Ref LambdaLayer
       Tags:
         Name:  "JGLF"
         Stack: !Ref AWS::StackName

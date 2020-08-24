@@ -213,14 +213,18 @@ Resources:
             StackName: !Sub "${ArtifactName}-DEPLOY"
             ChangeSetName: !Sub "${ArtifactName}-DEPLOY-ChangeSet"
             TemplatePath: BuildArtifactAsZip::p13i_java_greetings_lambda_function_packaged.yaml
-            ParameterOverrides: !Sub |
-              {
-                "LambdaLayerStackName":"${LambdaLayerStackName}",
-                "LambdaLayerVersion":"${LambdaLayerVersion}",
-                "TagRoot":"${TagRoot}",
-                "TagProject":"${TagProject}",
-                "TagComponent":"${TagComponent}"
-              }
+            ParameterOverrides:
+              Fn::Sub:
+              - |
+                {
+                  "LambdaLayer":"${LambdaLayerName}:${LambdaLayerVersion}",
+                  "TagRoot":"${TagRoot}",
+                  "TagProject":"${TagProject}",
+                  "TagComponent":"${TagComponent}"
+                }
+              - LambdaLayerName:
+                  Fn::ImportValue:
+                    !Sub "${LambdaLayerStackName}-LambdaLayer"
             Capabilities: CAPABILITY_IAM
           RunOrder: 1
         - Name: ExecuteChangeSet
