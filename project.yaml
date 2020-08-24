@@ -20,6 +20,8 @@ Parameters:
     Type: String
   LambdaLayerStackName:
     Type: String
+  LambdaLayerVersion:
+    Type: String
   TagRoot:
     Description: The main Root structure
     Type: String
@@ -214,6 +216,7 @@ Resources:
             ParameterOverrides: !Sub |
               {
                 "LambdaLayerStackName":"${LambdaLayerStackName}",
+                "LambdaLayerVersion":"${LambdaLayerVersion}",
                 "TagRoot":"${TagRoot}",
                 "TagProject":"${TagProject}",
                 "TagComponent":"${TagComponent}"

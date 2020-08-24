@@ -8,10 +8,12 @@ printf "DIR is %s\n" ${DIR}
 # Load the necessary arguments from file
 . ${DIR}/setup_args.txt
 
-read -t ${inputTimeout} -p "Enter component name [${projectName}], you have ${inputTimeout}s or press <Enter> to accept default: " input
+read -t ${inputTimeout} -p "Enter component name [${projectName}] or press <Enter> to accept default, you have ${inputTimeout}s: " input
 
 projectName=${input:-$projectName}
 greetingName="github.com/rajivmb"
+
+printf "\n"
 
 read -t ${inputTimeout} -p "Enter greeting name [${greetingName}], you have ${inputTimeout}s: " input
 

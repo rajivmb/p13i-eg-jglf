@@ -7,6 +7,18 @@ echo "Initialising..."
 
 spinner="/-\|"
 
+get_resource () {
+    local  __resultvar=${1}
+
+    printf "Fetching resource %s from %s outputs\n" ${3} ${2}
+    local  response=$(aws cloudformation describe-stacks \
+        --stack-name "${2}" \
+        --query "Stacks[*].Outputs[?OutputKey=='${3}'].OutputValue" \
+        --output text)
+
+    eval ${__resultvar}="'${response}'"
+}
+
 fetch_pipeline_status() {
   aws codepipeline list-pipeline-executions \
         --pipeline-name ${pipelineName} \
@@ -29,13 +41,35 @@ read -t ${inputTimeout} -p "Enter component name [${projectName}] or press <Ente
 
 projectName=${inputProjectName:-$projectName}
 
+printf "\n"
+
 read -t ${inputTimeout} -p "Enter your Secret name of GitHub token stored in AWS Secrets Manager [${gitHubTokenSecret}], you have ${inputTimeout}s: " inputGitHubTokenSecret
 
 gitHubTokenSecret=${inputGitHubTokenSecret:-$gitHubTokenSecret}
 
+printf "\n"
+
 read -t ${inputTimeout} -p "Enter your GitHub Packages (repo) URL to use as private Maven repo [${internalRepoURL}], you have ${inputTimeout}s: " inputGitHubMavenRepoURL
 
 internalRepoURL=${inputGitHubMavenRepoURL:-$internalRepoURL}
+
+get_resource lambdaLayer "${parentName}-DEPLOY" "${layerName}"
+
+OIFS=$IFS
+IFS=":"
+layerArnArray=(${lambdaLayer})
+lambdaLayer="arn:aws:lambda:${layerArnArray[3]}:${layerArnArray[4]}:layer:${layerArnArray[6]}"
+IFS=${OIFS}
+
+printf "\nFetching latest version of Lambda Layer: %s.\n" ${lambdaLayer}
+lambdaLayerVersion=$(aws lambda list-layer-versions \
+    --layer-name "${lambdaLayer}" \
+    --query "LayerVersions[*].Version" \
+    --max-items 1 \
+    --output text | head -n 1)
+
+printf "\nLatest version of Lambda Layer: %s. is %s\n" ${lambdaLayer} ${lambdaLayerVersion}
+
 
 printf "\nStarting to setup %s\n" ${projectName}
 
@@ -47,7 +81,8 @@ aws cloudformation deploy \
     --capabilities CAPABILITY_IAM \
     --parameter-overrides \
         ArtifactName="${projectName}" \
-        LambdaLayerStackName="${lambdaLayerStackName}" \
+        LambdaLayerStackName="${parentName}-DEPLOY" \
+        LambdaLayerVersion="${lambdaLayerVersion}" \
         GitHubOwner="${githubOwner}" \
         CodeRepository="${codeRepository}" \
         GitHubTokenSecret="${gitHubTokenSecret}" \
@@ -62,7 +97,7 @@ pipelineName=$(aws cloudformation describe-stacks \
     --query "Stacks[*].Outputs[?OutputKey=='PipelineName'].OutputValue" \
     --output text)
 
-printf "Pipeline name is: %s\n" ${pipelineName}
+printf "Deploying Lambda Function via Pipeline: %s\n" ${pipelineName}
 
 pipelineStatus=$(fetch_pipeline_status)
 waitTime=0

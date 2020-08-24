@@ -1,6 +1,7 @@
 inputTimeout=30
+parentName="P13i-MIT-Eg-JPLL"
 projectName="P13i-MIT-Eg-JGLF"
-lambdaLayerStackName="P13i-MIT-Eg-JPLL-DEPLOY"
+layerName="P13iMITEgJavaParentLambdaLayerArn"
 githubOwner="rajivmb"
 gitHubTokenSecret="P13iAWSGitHubTokenSecret"
 createGitHubWebHook="Y"
