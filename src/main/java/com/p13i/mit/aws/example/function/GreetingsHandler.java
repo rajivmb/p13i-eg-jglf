@@ -1,6 +1,7 @@
 package com.p13i.mit.aws.example.function;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.util.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +19,11 @@ public class GreetingsHandler {
 
             log.info("Input is {}", input); //passed in parameter values
 
-            String greeting = getString("greeting.hello", input.get("name"));
+            String name = (String) input.get("name");
+
+            if(StringUtils.isNullOrEmpty(name)) name = "World";
+
+            String greeting = getString("greeting.hello", name);
 
             log.info("Constructed greeting is: {}", greeting);
 
