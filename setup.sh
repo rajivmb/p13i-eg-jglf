@@ -91,7 +91,7 @@ aws cloudformation deploy \
         InternalRepoURL="${internalRepoURL}" \
         TagRoot="${tagRoot}" \
         TagProject="${tagProject}" \
-        TagComponent="JPLL" \
+        TagComponent="JGLF" \
         #CreateGitHubWebHook=${createGitHubWebHook}
 
 pipelineName=$(aws cloudformation describe-stacks \
