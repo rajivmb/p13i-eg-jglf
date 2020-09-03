@@ -16,14 +16,14 @@ Parameters:
     Type: String
 
 Resources:
-  P13iMITEgJavaLambdaFunction:
+  P13iEgJavaLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Description: Function using Layer
       CodeUri: 'target/p13i-java-greetings-lambda-function-1.0.0-SNAPSHOT.jar'
       Handler: 'com.p13i.mit.aws.example.function.GreetingsHandler::handleRequest'
       Runtime: 'java11'
-      Role: !GetAtt 'P13iMITEgJavaLambdaFunctionExecRole.Arn'
+      Role: !GetAtt 'P13iEgJavaLambdaFunctionExecRole.Arn'
       MemorySize: 256
       Timeout: 60
       Layers:
@@ -35,7 +35,7 @@ Resources:
         Project: !Ref TagProject
         Component: !Ref TagComponent
 
-  P13iMITEgJavaLambdaFunctionExecRole:
+  P13iEgJavaLambdaFunctionExecRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -49,7 +49,7 @@ Resources:
       - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
-      - PolicyName: P13iMITEgJavaLambdaFunctionExecRolePolicy
+      - PolicyName: P13iEgJavaLambdaFunctionExecRolePolicy
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -75,7 +75,7 @@ Resources:
         Value: !Ref TagComponent
 
 Outputs:
-  P13iMITEgJavaLambdaFunctionArn:
-    Value: !Ref 'P13iMITEgJavaLambdaFunction'
-  P13iMITEgJavaLambdaFunctionExecRoleArn:
-    Value: !GetAtt 'P13iMITEgJavaLambdaFunctionExecRole.Arn'
+  P13iEgJavaLambdaFunctionArn:
+    Value: !Ref 'P13iEgJavaLambdaFunction'
+  P13iEgJavaLambdaFunctionExecRoleArn:
+    Value: !GetAtt 'P13iEgJavaLambdaFunctionExecRole.Arn'
