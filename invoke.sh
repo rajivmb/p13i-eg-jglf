@@ -21,7 +21,7 @@ greetingName=${input:-$greetingName}
 
 functionName=`aws cloudformation describe-stacks \
     --stack-name "${projectName}-DEPLOY" \
-    --query "Stacks[*].Outputs[?OutputKey=='P13iMITEgJavaLambdaFunctionArn'].OutputValue" \
+    --query "Stacks[*].Outputs[?OutputKey=='P13iEgJavaLambdaFunctionArn'].OutputValue" \
     --output text`
 
 aws lambda invoke --function-name "${functionName}" --payload '{"name":"'${greetingName}'"}' response.txt && cat response.txt && rm response.txt && echo
